@@ -5,18 +5,18 @@ from cassandra.query import SimpleStatement
 from cassandra import OperationTimedOut
 import uuid
 
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["GET", "POST"],
-    allow_headers=["*"],
-)
+# app = FastAPI()
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["GET", "POST"],
+#     allow_headers=["*"],
+# )
 
 # global_session = None
 
-def driver_feedback(session):
+def driver_feedback(app, session):
     @app.post("/driver")
     async def user(safety_rating: int, cleanliness_rating: int, punctuality: int, cancelled_ride: int, overall_rating: int):
         try:
@@ -28,11 +28,11 @@ def driver_feedback(session):
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
-def user_feedback(session):
+def user_feedback(app, session):
     @app.post("/user")
     async def user(trust_rating: int, cleanliness_rating: int, punctuality: int, cancelled_ride: int, overall_rating: int):
         try:
-            insert_query = """INSERT INTO driverdb.users(driver_id, created_at, trust_rating, cleanliness_rating, punctuality, cancelled_ride, overall_rating) 
+            insert_query = """INSERT INTO driverdb.users(user_id, created_at, trust_rating, cleanliness_rating, punctuality, cancelled_ride, overall_rating) 
                               VALUES(uuid(), toTimeStamp(now()), %s, %s, %s, %s, %s)"""
             session.execute(insert_query,
                                    (trust_rating, cleanliness_rating, punctuality, cancelled_ride, overall_rating))
