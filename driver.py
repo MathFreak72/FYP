@@ -5,6 +5,7 @@ import pytz
 from datetime import datetime
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
+from fastapi import FastAPI
 
 from DB_Functions import create_driver_db, create_user_db
 from randomGenerator import insert_driver_ratings, insert_user_ratings
@@ -13,6 +14,8 @@ from DB_Functions import convertToTxtDriver, convertToTxtUser
 
 from AverageMapReduce import Mapper, Reducer
 from MLProfiling import ML_Profiling
+
+app = FastAPI()
 
 def work_flow():
     time = datetime.now(pytz.utc)
@@ -38,12 +41,12 @@ def work_flow():
 
     create_driver_db(session)
     # insert_driver_ratings(session)
-    driver_feedback(session)
+    driver_feedback(app, session)
     convertToTxtDriver(time, session)
 
     create_user_db(session)
     # insert_user_ratings(session)
-    user_feedback(session)
+    user_feedback(app, session)
     convertToTxtUser(time, session)
 
     driver_filepath = "driver_output.txt"
