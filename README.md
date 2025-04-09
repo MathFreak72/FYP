@@ -6,5 +6,5 @@
 # Install libraries
 
 ```
-> pip install uuid pytz nummpy scikit-learn uvicorn fastapi apscheduler cassandra-driver
+> pip install uuid pytz numpy scikit-learn uvicorn fastapi apscheduler cassandra-driver
 ```
