@@ -8,6 +8,7 @@ from cassandra.auth import PlainTextAuthProvider
 
 from DB_Functions import create_driver_db, create_user_db
 from randomGenerator import insert_driver_ratings, insert_user_ratings
+from insertFeedack import driver_feedback, user_feedback
 from DB_Functions import convertToTxtDriver, convertToTxtUser
 
 from AverageMapReduce import Mapper, Reducer
@@ -37,10 +38,12 @@ def work_flow():
 
     create_driver_db(session)
     # insert_driver_ratings(session)
+    driver_feedback(session)
     convertToTxtDriver(time, session)
 
     create_user_db(session)
     # insert_user_ratings(session)
+    user_feedback(session)
     convertToTxtUser(time, session)
 
     driver_filepath = "driver_output.txt"
